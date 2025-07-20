@@ -1,7 +1,6 @@
 import "./globals.css";
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import "font-awesome/css/font-awesome.min.css";
 
 import NavBar from "../component/NavBar";
 import "@fortawesome/fontawesome-free/css/all.min.css";

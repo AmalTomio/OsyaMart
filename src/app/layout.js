@@ -5,6 +5,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import NavBar from "../component/NavBar";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
+import ReduxProvider from "@/ReduxProvider";
+
 export const metadata = {
   title: {
     default: "Osya Collection",
@@ -20,9 +22,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <NavBar />
-        <main>{children}</main>
-        <footer className="text-center py-4">© 2025 OSYA</footer>
+        <ReduxProvider>
+          <NavBar />
+          <main>{children}</main>
+          <footer className="text-center py-4">© 2025 OSYA</footer>
+        </ReduxProvider>
       </body>
     </html>
   );

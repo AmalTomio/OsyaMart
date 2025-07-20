@@ -1,12 +1,20 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { addCart } from "@/redux/action";
 import Link from "next/link";
 import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css"; // optional if you want styling
+import "react-loading-skeleton/dist/skeleton.css";
 
 const Product = ({ id }) => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch();
+  const addProduct = (product) => {
+    dispatch(addCart(product));
+  };
 
   useEffect(() => {
     const getProduct = async () => {
@@ -35,11 +43,21 @@ const Product = ({ id }) => {
             <Skeleton height={400} width={400} />
           </div>
           <div className="col-md-6">
-            <h4><Skeleton width={150} /></h4>
-            <h1><Skeleton height={40} width="80%" /></h1>
-            <p className="lead fw-bolder"><Skeleton width={120} /></p>
-            <h3><Skeleton width={100} /></h3>
-            <p><Skeleton count={5} /></p>
+            <h4>
+              <Skeleton width={150} />
+            </h4>
+            <h1>
+              <Skeleton height={40} width="80%" />
+            </h1>
+            <p className="lead fw-bolder">
+              <Skeleton width={120} />
+            </p>
+            <h3>
+              <Skeleton width={100} />
+            </h3>
+            <p>
+              <Skeleton count={5} />
+            </p>
             <div className="d-flex">
               <Skeleton width={120} height={40} className="me-2" />
               <Skeleton width={120} height={40} />
@@ -74,12 +92,13 @@ const Product = ({ id }) => {
           <h1 className="display-5">{product.title}</h1>
           <p className="lead fw-bolder">
             Rating {product.rating?.rate}
-            <i className="fas fa-star mx-1" style={{ color: "#FFD43B" }}></i>
-            ({product.rating?.count})
+            <i className="fas fa-star mx-1" style={{ color: "#FFD43B" }}></i>(
+            {product.rating?.count})
           </p>
           <h3 className="display-6 fw-bold my-4">RM{product.price}</h3>
           <p className="lead">{product.description}</p>
-          <button className="btn btn-outline-dark px-4 py-2">
+
+          <button className="btn btn-outline-dark px-4 py-2" onClick={() => addProduct(product)}>
             Add to Cart
           </button>
           <Link href="/cart" className="btn btn-dark ms-2 px-3 py-2">

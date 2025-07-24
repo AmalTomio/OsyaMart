@@ -42,14 +42,15 @@ const cartState = useSelector((state) => state.cart);
                 </Link>
               </li>
 
-              <li className="nav-item">
-                <Link className="nav-link" href="/about">
+
+              <li className="nav-item ">
+                <Link className="nav-link disabled" href="/about">
                   About
                 </Link>
               </li>
 
               <li className="nav-item">
-                <Link className="nav-link" href="/contact">
+                <Link className="nav-link disabled" href="/contact">
                   Contact
                 </Link>
               </li>

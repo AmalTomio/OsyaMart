@@ -3,10 +3,14 @@
 import React from "react";
 import Link from "next/link";
 import { useSelector } from "react-redux";
+import useIsClient from "@/utils/useIsClient";
+
 
 const Navbar = () => {
 const cartState = useSelector((state) => state.cart); 
+  const isClient = useIsClient();
 
+  
   return (
     <div>
       <nav className="navbar navbar-expand-lg bg-body-tertiary navbar-light bg-white py-3 shadow-sm">
@@ -59,8 +63,8 @@ const cartState = useSelector((state) => state.cart);
                 <i className="fa fa-id-card me-1"></i> Register
               </Link>
               <Link href="/cart" className="btn btn-outline-dark ms-2">
-                <i className="fa fa-cart-shopping me-1"></i> Cart (
-                {cartState?.length || 0})
+                <i className="fa fa-cart-shopping me-1"></i> Cart  (
+                {isClient ? cartState?.length || 0 : 0})
               </Link>
             </div>
           </div>

@@ -25,7 +25,7 @@ export default function RootLayout({ children }) {
         <ReduxProvider>
           <NavBar />
           <main>{children}</main>
-          <footer className="text-center py-4">© 2025 OSYA</footer>
+          {/* <footer className="text-center py-4">© 2025 OSYA</footer> */}
         </ReduxProvider>
       </body>
     </html>

@@ -6,6 +6,7 @@ import { addCart } from "@/redux/action";
 import Link from "next/link";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import Swal from "sweetalert2";
 
 const Product = ({ id }) => {
   const [product, setProduct] = useState(null);
@@ -14,6 +15,14 @@ const Product = ({ id }) => {
   const dispatch = useDispatch();
   const addProduct = (product) => {
     dispatch(addCart(product));
+
+    Swal.fire({
+      title: "Added!",
+      text: `${product.title} has been added to your cart.`,
+      icon: "success",
+      showConfirmButton: false,
+      timer: 1500,
+    });
   };
 
   useEffect(() => {
@@ -98,7 +107,10 @@ const Product = ({ id }) => {
           <h3 className="display-6 fw-bold my-4">RM{product.price}</h3>
           <p className="lead">{product.description}</p>
 
-          <button className="btn btn-outline-dark px-4 py-2" onClick={() => addProduct(product)}>
+          <button
+            className="btn btn-outline-dark px-4 py-2"
+            onClick={() => addProduct(product)}
+          >
             Add to Cart
           </button>
           <Link href="/cart" className="btn btn-dark ms-2 px-3 py-2">

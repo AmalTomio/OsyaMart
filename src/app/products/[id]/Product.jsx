@@ -6,23 +6,21 @@ import { addCart } from "@/redux/action";
 import Link from "next/link";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import Swal from "sweetalert2";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Product = ({ id }) => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const dispatch = useDispatch();
+
   const addProduct = (product) => {
     dispatch(addCart(product));
-
-    Swal.fire({
-      title: "Added!",
-      text: `${product.title} has been added to your cart.`,
-      icon: "success",
-      showConfirmButton: false,
-      timer: 1500,
-    });
+    setShowToast(true);
+    setTimeout(() => {
+      setShowToast(false);
+    }, 2000);
   };
 
   useEffect(() => {
@@ -35,7 +33,7 @@ const Product = ({ id }) => {
         setProduct(data);
       } catch (error) {
         console.error("Error fetching product:", error);
-        setProduct(null); // keep it null for fallback rendering
+        setProduct(null);
       } finally {
         setLoading(false);
       }
@@ -43,34 +41,19 @@ const Product = ({ id }) => {
     if (id) getProduct();
   }, [id]);
 
-  // 🔵 Show loading skeleton
   if (loading)
     return (
       <div className="container my-5 py-5">
         <div className="row py-5">
-          <div className="col-md-6 d-flex justify-content-center align-items-center">
+          <div className="col-md-6">
             <Skeleton height={400} width={400} />
           </div>
           <div className="col-md-6">
-            <h4>
-              <Skeleton width={150} />
-            </h4>
-            <h1>
-              <Skeleton height={40} width="80%" />
-            </h1>
-            <p className="lead fw-bolder">
-              <Skeleton width={120} />
-            </p>
-            <h3>
-              <Skeleton width={100} />
-            </h3>
-            <p>
-              <Skeleton count={5} />
-            </p>
-            <div className="d-flex">
-              <Skeleton width={120} height={40} className="me-2" />
-              <Skeleton width={120} height={40} />
-            </div>
+            <Skeleton height={40} width={200} />
+            <Skeleton height={50} />
+            <Skeleton height={30} width={150} />
+            <Skeleton count={5} />
+            <Skeleton height={50} width={200} />
           </div>
         </div>
       </div>
@@ -86,39 +69,67 @@ const Product = ({ id }) => {
     );
 
   return (
-    <div className="container my-5 py-5">
-      <div className="row py-5">
-        <div className="col-md-6">
-          <img
-            src={product.image}
-            alt={product.title}
-            height="400px"
-            width="400px"
-          />
-        </div>
-        <div className="col-md-6">
-          <h4 className="text-uppercase text-black-50">{product.category}</h4>
-          <h1 className="display-5">{product.title}</h1>
-          <p className="lead fw-bolder">
-            Rating {product.rating?.rate}
-            <i className="fas fa-star mx-1" style={{ color: "#FFD43B" }}></i>(
-            {product.rating?.count})
-          </p>
-          <h3 className="display-6 fw-bold my-4">RM{product.price}</h3>
-          <p className="lead">{product.description}</p>
+    <>
+      {/* ✅ Toast Notification */}
+      {showToast && (
+        <>
+          {/* Page Blur Background */}
+          <div
+            className="position-fixed top-0 start-0 w-100 h-100"
+            style={{
+              backdropFilter: "blur(3px)",
+              zIndex: 1040,
+            }}
+          ></div>
 
-          <button
-            className="btn btn-outline-dark px-4 py-2"
-            onClick={() => addProduct(product)}
+          {/* Toast on Top */}
+          <div
+            className="position-fixed top-0 start-50 translate-middle-x mt-3"
+            style={{ zIndex: 1055 }}
           >
-            Add to Cart
-          </button>
-          <Link href="/cart" className="btn btn-dark ms-2 px-3 py-2">
-            Go to Cart
-          </Link>
+            <div className="toast show text-white bg-success shadow border-0">
+              <div className="toast-body fw-bold">
+                ✅ {product.title} added to cart!
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* 🛒 Main Product Display */}
+      <div className={`container my-5 py-5 ${showToast ? "pe-none" : ""}`}>
+        <div className="row py-5">
+          <div className="col-md-6">
+            <img
+              src={product.image}
+              alt={product.title}
+              height="400px"
+              width="400px"
+            />
+          </div>
+          <div className="col-md-6">
+            <h4 className="text-uppercase text-black-50">{product.category}</h4>
+            <h1 className="display-5">{product.title}</h1>
+            <p className="lead fw-bolder">
+              Rating {product.rating?.rate}
+              <i className="fas fa-star mx-1" style={{ color: "#FFD43B" }}></i>(
+              {product.rating?.count})
+            </p>
+            <h3 className="display-6 fw-bold my-4">RM{product.price}</h3>
+            <p className="lead">{product.description}</p>
+            <button
+              className="btn btn-outline-dark px-4 py-2"
+              onClick={() => addProduct(product)}
+            >
+              Add to Cart
+            </button>
+            <Link href="/cart" className="btn btn-dark ms-2 px-3 py-2">
+              Go to Cart
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
